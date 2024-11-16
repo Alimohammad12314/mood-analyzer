@@ -49,7 +49,7 @@ app.post("/analyze-mood", async (req, res) => {
     const text = req.body.text;
     const moodResponse = await analyzeMood(text);
 
-    // Extract the inner array with emotion data
+    
     const mood =
       Array.isArray(moodResponse) && Array.isArray(moodResponse[0])
         ? moodResponse[0]
