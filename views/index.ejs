@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mood Analyzer</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        background-color: #1a1a1a;
+        color: #ffffff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .container {
+        width: 90%;
+        max-width: 600px;
+        text-align: center;
+        margin-top: 2rem;
+      }
+
+      h1 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+      }
+
+      .input-container {
+        background-color: #2d2d2d;
+        padding: 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 1.5rem;
+      }
+
+      textarea {
+        width: 100%;
+        min-height: 100px;
+        padding: 0.8rem;
+        background-color: #333333;
+        border: 1px solid #444444;
+        border-radius: 8px;
+        color: #ffffff;
+        font-size: 0.9rem;
+        resize: vertical;
+        font-family: inherit;
+        box-sizing: border-box;
+      }
+
+      textarea:focus {
+        outline: none;
+        border-color: #666666;
+      }
+
+      button {
+        background-color: #4a4a4a;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: background-color 0.2s;
+        margin-top: 1rem;
+        width: 100%;
+      }
+
+      button:hover {
+        background-color: #5a5a5a;
+      }
+
+      .results {
+        background-color: #2d2d2d;
+        padding: 1.5rem;
+        border-radius: 12px;
+        margin-top: 1.5rem;
+        animation: fadeIn 0.3s ease-in;
+      }
+
+      .emotion-card {
+        background-color: #333333;
+        padding: 0.8rem;
+        border-radius: 8px;
+        margin-bottom: 0.8rem;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .emotion-label {
+        font-size: 1rem;
+        margin-bottom: 0.3rem;
+        font-weight: bold;
+      }
+
+      .emotion-score {
+        background-color: #4a4a4a;
+        height: 16px;
+        width: 100%;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-top: 0.2rem;
+      }
+
+      .score-fill {
+        height: 100%;
+        background-color: #666666;
+        transition: width 0.5s ease-in-out;
+      }
+
+      .error-message {
+        color: #ff6b6b;
+        padding: 1rem;
+        background-color: #2d2d2d;
+        border-radius: 8px;
+        margin-top: 1rem;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Mood Analyzer</h1>
+      <div class="input-container">
+        <form action="/analyze-mood" method="POST">
+          <textarea
+            name="text"
+            placeholder="How are you feeling today?"
+            required
+          >
+<%= locals.originalText || '' %></textarea
+          >
+          <button type="submit">Analyze Mood</button>
+        </form>
+      </div>
+
+      <% if (locals.error) { %>
+      <div class="error-message"><%= error %></div>
+      <% } %> <% if (locals.mood) { %>
+      <div class="results">
+        <h2>Mood Analysis Results</h2>
+        <% mood.forEach((emotion) => { %>
+        <div class="emotion-card">
+          <div class="emotion-label">
+            <%= emotion.label.charAt(0).toUpperCase() + emotion.label.slice(1)
+            %>
+          </div>
+          <div class="emotion-score">
+            <div
+              class="score-fill"
+              style="width: <%= emotion.score * 100 %>%"
+            ></div>
+          </div>
+          <div style="margin-top: 0.3rem">
+            <%= Math.round(emotion.score * 100) %>%
+          </div>
+        </div>
+        <% }); %>
+      </div>
+      <% } %>
+    </div>
+  </body>
+</html>
